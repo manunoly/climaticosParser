@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+{% extends "baltraApp/template.html" %}
+    {% load staticfiles %}
+{% block title %}| Estación Baltra{% endblock %}
+
+{% block content %}
+
+    <link href="{% static 'baltraApp/cssGeneral/dataTables.bootstrap.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'baltraApp/cssGeneral/dataTables.colVis.css' %}" rel="stylesheet" type="text/css">
+
+
+    <script type="text/javascript" language="javascript" src={% static 'baltraApp/jsGenerales/jquery.dataTables.min.js'%}></script>
+    <script type="text/javascript" language="javascript" src={% static 'baltraApp/jsGenerales/dataTables.colVis.js'%}></script>
+    <script type="text/javascript" language="javascript" src={% static 'baltraApp/jsGenerales/dataTables.bootstrap.js'%}></script>
+
+    <script type="text/javascript" language="javascript" src={% static 'baltraApp/jsGenerales/highstock.js'%}></script>
+    <script type="text/javascript" language="javascript" src={% static 'baltraApp/jsGenerales/exporting.js'%}></script>
+    <script type="text/javascript" language="javascript" src={% static 'baltraApp/baltraCargarDatos.js'%}></script>
+{#{% csrf_token %}#}
+{#    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">#}
+{#	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">#}
+{#    <link rel="stylesheet" type="text/css" href="//datatables.net/release-datatables/extensions/ColVis/css/dataTables.colVis.css">#}
+
+{#    <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>#}
+{#    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>#}
+{#    <script type="text/javascript" language="javascript" src="//datatables.net/release-datatables/extensions/ColVis/js/dataTables.colVis.js"></script>#}
+{#    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>#}
+{##}
+{#    <script src="http://code.highcharts.com/stock/highstock.js"></script>#}
+{#    <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>#}
+
+
+
+
+
+<div class="container-fluid">
+<h2>Datos Climaticos Estaci&oacuten Baltra</h2>
+<div class="row">
+  <div class="col-lg-6">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Buscar en BD campo:valor">
+      <span class="input-group-btn">
+        <div id="buscarbd"><button class="btn btn-default" type="button">Buscar</button></div>
+      </span>
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+</div>
+<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>fecha</th>
+                <th>TAP</th>
+                <th>TAMax</th>
+                <th>TAMin</th>
+                <th>HRP</th>
+                <th>HRMax</th>
+                <th>HRMin</th>
+                <th>PBP</th>
+                <th>PBMax</th>
+                <th>PBMin</th>
+                <th>RSGP</th>
+                <th>RSGMax</th>
+                <th>RSGMin</th>
+                <th>RSGSum</th>
+                <th>RSDP</th>
+                <th>RSDMax</th>
+                <th>RSDMin</th>
+                <th>RSDSum</th>
+                <th>VDP</th>
+                <th>VDMax</th>
+                <th>VDRMax</th>
+                <th>VHR</th>
+                <th>VMR</th>
+                <th>VVP</th>
+                <th>VVMax</th>
+                <th>VV</th>
+                <th>VR</th>
+                <th>VoltB</th>
+            </tr>
+        </thead>
+
+        <tfoot>
+            <tr>
+                <th>fecha</th>
+                <th>TAP</th>
+                <th>TAMax</th>
+                <th>TAMin</th>
+                <th>HRP</th>
+                <th>HRMax</th>
+                <th>HRMin</th>
+                <th>PBP</th>
+                <th>PBMax</th>
+                <th>PBMin</th>
+                <th>RSGP</th>
+                <th>RSGMax</th>
+                <th>RSGMin</th>
+                <th>RSGSum</th>
+                <th>RSDP</th>
+                <th>RSDMax</th>
+                <th>RSDMin</th>
+                <th>RSDSum</th>
+                <th>VDP</th>
+                <th>VDMax</th>
+                <th>VDRMax</th>
+                <th>VHR</th>
+                <th>VMR</th>
+                <th>VVP</th>
+                <th>VVMax</th>
+                <th>VV</th>
+                <th>VR</th>
+                <th>VoltB</th>
+{#                #}
+{#                <th>fecha</th>#}
+{#                <th>temperaturaAirePromedio</th>#}
+{#                <th>temperaturaAireMaxima</th>#}
+{#                <th>temperaturaAireMinima</th>#}
+{#                <th>humedadRelativaPromedio</th>#}
+{#                <th>humedadRelativaMaxima</th>#}
+{#                <th>humedadRelativaMinima</th>#}
+{#                <th>presionBarometricaPromedio</th>#}
+{#                <th>presionBarometricaMaxima</th>#}
+{#                <th>presionBarometricaMinima</th>#}
+{#                <th>radiacionSolarGlobalPromedio</th>#}
+{#                <th>radiacionSolarGlobalMaxima</th>#}
+{#                <th>radiacionSolarGlobalMinima</th>#}
+{#                <th>radiacionSolarGlobalSumatoria</th>#}
+{#                <th>radiacionSolarDifusaPromedio</th>#}
+{#                <th>radiacionSolarDifusaMaxima</th>#}
+{#                <th>radiacionSolarDifusaMinima</th>#}
+{#                <th>radiacionSolarDifusaSumatoria</th>#}
+{#                <th>vientoDireccionPromedio</th>#}
+{#                <th>vientoDireccionMaxima</th>#}
+{#                <th>vientoDireccionRachaMaxima</th>#}
+{#                <th>vientoHoraRacha</th>#}
+{#                <th>vientoMinutoRacha</th>#}
+{#                <th>vientoVelocidadPromedio</th>#}
+{#                <th>vientoVelocidadMaxima</th>#}
+{#                <th>vientoVelocidad</th>#}
+{#                <th>vientoRecorrido</th>#}
+{#                <th>voltajeBateria</th>#}
+            </tr>
+        </tfoot>
+    </table>
+
+{#<div id="containerGraf" style="float: left; margin-left: 3em; height:400px; width: 600px; min-width: 310px"></div>#}
+
+
+
+        <div id="temperatura" style="float: left; margin: 4em; height:400px; width: 40%; min-width: 310px"></div>
+        <div id="humedad" style="float: left; margin: 4em; height:400px; width: 40%; min-width: 310px"></div>
+        <div id="presionBarometrica" style="float: left; margin: 4em; height:400px; width: 40%; min-width: 310px"></div>
+        <div id="viento" style="float: left; margin: 4em; height:400px; width: 40%; min-width: 310px"></div>
+
+
+{#<h2>Datos Climaticos Estaci&oacuten Baltra</h2>#}
+
+{#<div><label class="label label-default">Realizar Busqueda</label><input type="text" placeholder="Username" class="form-control" <span class="glyphicon glyphicon-search" aria-hidden="true"></span>> </div>#}
+{#<table class="table">#}
+{#    <thead>#}
+{#      <tr>#}
+{#        <th>Estaci&oacuten</th>#}
+{#        <th>Fecha</th>#}
+{#        <th>Datos </th>#}
+{#        <th>temperaturaAirePromedio </th>#}
+{#        <th>temperaturaAireMaxima </th>#}
+{#      </tr>#}
+{#    </thead>#}
+{#    <tbody>#}
+{#    {% for clima in climaD %}#}
+{#      <tr>#}
+{#        <td class="col-xs-6 col-sm-3">{{ clima.Estacion }}</td>#}
+{#        <td class="col-xs-6 col-sm-3">{{ clima.fecha }}</td>#}
+{#        <td class="col-xs-6 col-sm-3">{{ clima.fichero }}</td><td>{{ clima.temperaturaAirePromedio}}</td><td>{{ clima.temperaturaAirePromedio}}</td>#}
+{#      </tr>#}
+{#    {% endfor %}#}
+{#    </tbody>#}
+{#  </table>#}
+</div>
+{% endblock %}

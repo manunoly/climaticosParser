@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Sistema Climático{% block title %}{{ title }} | {{ site_title|default:_('INER') }}{% endblock %}</title>
+
+    {% load staticfiles %}
+    <link href="{% static 'baltraApp/cssGeneral/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+{#    <link href="{% static 'baltraApp/cssGeneral/bootstrap-theme.min.css' %}" rel="stylesheet" type="text/css">#}
+{#    <link href="{% static 'baltraApp/cssGeneral/modern-business.css' %}" rel="stylesheet" type="text/css">#}
+{#    <link href="{% static 'baltraApp/cssGeneral/font-awesome.min.css' %}" rel="stylesheet" type="text/css">#}
+
+    <script type="text/javascript" language="javascript" src={% static 'baltraApp/jsGenerales/jquery-1.11.0.min.js'%}></script>
+    <script type="text/javascript" language="javascript" src={% static 'baltraApp/jsGenerales/bootstrap.min.js'%}></script>
+     <script>
+        $(document).scroll(function(e){
+            var scrollTop = $(document).scrollTop();
+            if(scrollTop > 110){
+{#                console.log(scrollTop);#}
+                $('.navbar').removeClass('navbar-static-top').addClass('navbar-fixed-top');
+                if( $('#bannerIMG').length <= 0){
+                    $('.navbar').prepend('<img id="bannerIMG" class="nopadding img-responsive pull-left" style="max-height:50px" src="{% static "baltraApp/imagenes/logoiner.png" %}" />');
+
+
+                }
+{#                $('.navbar').add_image(src="{% static "baltraApp/imagenes/logoiner.png" %}");#}
+            } else {
+                $('.navbar').removeClass('navbar-fixed-top').addClass('navbar-static-top');
+               if( $('#bannerIMG').length > 0){
+                    $('#bannerIMG').remove();
+                }
+            }
+        });
+    </script>
+{#        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>#}
+{#        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>#}
+
+</head>
+<body>
+{% block banner %}
+    <div id="banner" class="container row text-left"><img src="{% static "baltraApp/imagenes/logoiner.png" %}" alt="banner INER">
+</div>
+{% endblock %}
+{% block menu %}
+    <div id="nav">
+      <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Menu de Navegacion</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/baltraApp/"><b>Sistema Climático</b></a>
+          </div>
+          <div class="navbar-collapse collapse navbar-right">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="{{ 'index' }}">Inicio</a></li>
+              <li><a href="{{ 'iner' }}">INER</a></li>
+                <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Estaciones <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{ 'mostrarDatos' }}">Baltra</a></li>
+                  <li><a href="#">Oficina Bossano</a></li>
+                  <li><a href="#">Estación de Quito</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li class="dropdown-header">Otras Estaciones</li>
+                  <li><a href="#">Estaciones 1</a></li>
+                  <li><a href="#">Estaciones 2</a></li>
+                </ul>
+              </li>
+              <li><a href="{{ 'contacto' }}">Contacto</a></li>
+
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container row text-right" style="padding: 12em 4em 1em"><img src="{% static "baltraApp/imagenes/logoiner.png" %}" alt="banner INER"></div>
+    <h1 class="text-center text-primary">Instituto Nacional de Eficiencia Energética y Energías</h1>
+
+{% endblock %}
+</body>
+</html>
+
+
+
+
+{#{% block branding %}#}
+{#<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Administración Sistema Climático') }}</a></h1>#}
+{#{% endblock %}#}
+
+
+
+
+

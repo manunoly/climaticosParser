@@ -1,0 +1,220 @@
+{% extends "baltraApp/template.html" %}
+{% load staticfiles %}
+{% block title %}| Estación Baltra{% endblock %}
+
+{% block content %}
+    <script type="text/javascript">
+        $(function () {
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            var csrftoken = getCookie('csrftoken');
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+            $("[rel=popover]").popover({
+                setTimeout: (function () {
+                    $("[rel=popover]").popover('hide')
+                }, 30)
+            });
+            $.ajax({
+                type: "GET",
+                url: "estacionesCampos",
+                cache: true,
+                dataType: 'json',
+                success: function (data) {
+                    {#                        console.log(data);#}
+                    var fieldsetC = ''
+                    for (var obj in data) {
+                        if (data.hasOwnProperty(obj)) {
+                            fieldsetC = fieldsetC + '<fieldset id = ' + data[obj].Estacion + '><legend class="enrollable"> ->' + data[obj].Estacion + '</legend><div class="content form-group">';
+
+                            for (var prop in data[obj]) {
+                                if ((data[obj].hasOwnProperty(prop)) && (prop.substr(0, 1) != "_" )) {
+                                    if (prop != "Estacion")
+                                        fieldsetC = fieldsetC + "<label class = 'col-xs-4'><input type='checkbox' id=" + data[obj].Estacion + "_" + prop + ">" + prop + "</label>";
+                                }
+                            }
+                            fieldsetC = fieldsetC + '<input id = "+ data[obj].Estacion +"Filtro placeholder ="Campo para Filtrar" type="text" class="col-xs-12">'
+                            fieldsetC = fieldsetC + '</div></fieldset>';
+
+
+                        }
+
+                    }
+                    {#                        todo añadir aqui al otro fieldset#}
+                    $('#filtradoContenido').append(fieldsetC)
+                }
+            });
+            $('#btn-filtrar').click(function () {
+                $('[rel="popover"]').popover('hide');
+                var selected = [];
+                $('#filtradoContenido input:checked').each(function () {
+                    selected.push($(this).attr('id'));
+                });
+                adicionarGraf(selected);
+            });
+            function adicionarGraf(campos) {
+                var options = {
+                    chart: {
+                        renderTo: 'filtradoContenido',
+                        type: 'line',
+                        marginRight: 30,
+                        marginBottom: 25
+                    },
+                    title: {
+                        text: 'Grafica de Humedad Relativa',
+                        x: -20 //center
+                    },
+                    rangeSelector: {
+                        selected: 4
+                    },
+                    subtitle: {
+                        text: '',
+                        x: -20
+                    },
+                    xAxis: [{
+                        labels: {
+                            formatter: function () {
+                                return Highcharts.dateFormat('%Y-%m-%d', this.value);
+                            }
+                        }
+                    }],
+                    yAxis: {
+                        title: {
+                            text: 'Humedad Realativa'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                    tooltip: {
+                        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+                        valueDecimals: 2
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'top',
+                        x: -10,
+                        y: 100,
+                        borderWidth: 0
+                    },
+                    series: []
+                };
+                $.ajax({
+                    type: "GET",
+                    url: "graficaCampos",
+                    data: {campos: campos.toString()},
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+{#                    async: true,#}
+                    cache: false,
+                    success: function (ret) {
+                    },
+                    error: function (x, e) {
+                        alert("error occur");
+                    }
+                });
+                {#                $.getJSON("humedadJson", function(json) {#}
+                {#                for (var i=0;arr.length;i++){#}
+                {#                     var obj = arr[i];#}
+                {#                    for(var key in obj){#}
+                {#                        var attrName = key;#}
+                {#                        var attrValue = obj[key];#}
+                {#                    }#}
+                {#                }#}
+                {#                options.xAxis.categories = json[0]['data'];#}
+                {#                options.series[0] = json[1];#}
+                {#                options.series[1] = json[2];#}
+                {#                options.series[2] = json[3];#}
+                {#                chart = new Highcharts.StockChart(options);#}
+                {#            });#}
+
+                $('#contenedorGraficas').append('<button type="button" id="btn-mostrar" class="btn btn-large">Grafica</button>')
+            };
+            $('#contenedorGraficas').on("click", "button", function () {
+                alert("Elimiar");
+            });
+            $('#contendor').on("click", "legend", function () {
+                $('[rel="popover"]').popover('hide');
+                $(this).parent().find('.content').slideToggle("slow");
+            });
+            $('#btn-mostrar').click(function () {
+                $('#graficasContenido').append('<fieldset><legend class="enrollable">Estacion</legend><div class="content">this<br/>is<br/>content<br/></div></fieldset>');
+            });
+
+        });
+    </script>
+
+    <div id="contendor" class="container">
+        <div>
+            <button type="button" id="btn-mostrar" class="btn btn-primary align-right">Mostrar</button>
+            <button type="button" id="btn-filtrar" class="btn btn-primary pull-right">Filtrar</button>
+            <div id="filtrado">
+                <fieldset>
+                    <legend id="legne1"><span rel="popover" data-trigger="hover click" data-container="body"
+                                              data-placement="auto" data-content="Expandir-Contraer">Opciones de Filtrado</span>
+                    </legend>
+                    <!-- Some input, p, div, whatever -->
+                    <div id="filtradoContenido" class="content">
+
+                    </div>
+                </fieldset>
+
+            </div>
+
+
+            <div id="graficas">
+                <fieldset>
+                    <legend><span rel="popover" data-trigger="hover click" data-container="body" data-placement="auto"
+                                  data-content="Expandir-Contraer">Graficas</span></legend>
+                    <!-- Some input, p, div, whatever -->
+                    <div id="contenedorGraficas" class="content">
+                        <p>
+                            a
+                        </p>
+
+                        <p>
+                            a
+                        </p>
+
+                        <p>
+                            a
+                        </p>
+
+                        <div id="graficasContenido" class="content">
+
+                        </div>
+                    </div>
+                </fieldset>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
